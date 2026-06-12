@@ -14,3 +14,8 @@ export const REPORT_PERIODS = [
   { value: 'weekly', label: 'Weekly' },
   { value: 'monthly', label: 'Monthly' },
 ];
+
+export const PAYMENT_STATUSES = [
+  { value: 'unpaid', label: 'Unpaid' },
+  { value: 'paid', label: 'Paid' },
+];

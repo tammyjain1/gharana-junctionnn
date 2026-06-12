@@ -12,6 +12,9 @@ function reportRows(expenses) {
     Date: shortDate(expense.expense_date),
     'Created At': shortDate(expense.created_at),
     'Updated At': shortDate(expense.updated_at),
+    'Payment Receiver': expense.payment_receiver || '',
+    'Payment Status': expense.payment_status || 'unpaid',
+    'Paid At': shortDate(expense.paid_at),
   }));
 }
 
@@ -21,7 +24,7 @@ export function exportExpensesPdf(expenses, title = 'Gharana Junction Expense Re
   doc.text(title, 14, 16);
   autoTable(doc, {
     startY: 24,
-    head: [['Expense ID', 'Staff Name', 'Amount', 'Category', 'Description', 'Date', 'Created At', 'Updated At']],
+    head: [['Expense ID', 'Staff Name', 'Amount', 'Category', 'Description', 'Date', 'Payment Receiver', 'Payment Status', 'Paid At']],
     body: reportRows(expenses).map((row) => [
       row['Expense ID'],
       row['Staff Name'],
@@ -29,8 +32,9 @@ export function exportExpensesPdf(expenses, title = 'Gharana Junction Expense Re
       row.Category,
       row.Description,
       row.Date,
-      row['Created At'],
-      row['Updated At'],
+      row['Payment Receiver'],
+      row['Payment Status'],
+      row['Paid At'],
     ]),
     styles: { fontSize: 8 },
     headStyles: { fillColor: [5, 150, 105] },
@@ -48,7 +52,7 @@ function escapeCell(value) {
 
 export function exportExpensesExcel(expenses) {
   const rows = reportRows(expenses);
-  const headers = ['Expense ID', 'Staff Name', 'Amount', 'Category', 'Description', 'Date', 'Created At', 'Updated At'];
+  const headers = ['Expense ID', 'Staff Name', 'Amount', 'Category', 'Description', 'Date', 'Payment Receiver', 'Payment Status', 'Paid At', 'Created At', 'Updated At'];
   const html = `
     <html>
       <head><meta charset="UTF-8" /></head>

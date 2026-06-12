@@ -8,7 +8,7 @@ import StatCard from '../../components/StatCard.jsx';
 import { CategoryPie, MonthlyBar } from '../../components/Charts.jsx';
 import { REPORT_PERIODS } from '../../lib/constants.js';
 import { listExpenses } from '../../lib/api.js';
-import { groupByCategory, monthlySeries, totalAmount } from '../../lib/analytics.js';
+import { groupByCategory, monthlySeries, totalAmount, unpaidExpenses } from '../../lib/analytics.js';
 import { currency } from '../../lib/format.js';
 import { exportExpensesExcel, exportExpensesPdf } from '../../lib/exports.js';
 
@@ -60,8 +60,8 @@ export default function Reports() {
       </div>
       <div className="grid gap-4 sm:grid-cols-3">
         <StatCard label="Report Total" value={currency(totalAmount(reportExpenses))} />
+        <StatCard label="Pending Payments" value={currency(totalAmount(unpaidExpenses(reportExpenses)))} tone="amber" />
         <StatCard label="Records" value={reportExpenses.length} tone="blue" />
-        <StatCard label="Average Record" value={currency(reportExpenses.length ? totalAmount(reportExpenses) / reportExpenses.length : 0)} tone="amber" />
       </div>
       <div className="grid gap-4 xl:grid-cols-2">
         <section className="card p-5">

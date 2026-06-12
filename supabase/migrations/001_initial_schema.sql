@@ -15,12 +15,34 @@ create table if not exists public.expenses (
   category text not null,
   description text,
   expense_date date not null default current_date,
+  payment_receiver text,
+  payment_status text not null default 'unpaid' check (payment_status in ('paid', 'unpaid')),
+  paid_at date,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
 
+alter table public.expenses
+  add column if not exists payment_receiver text,
+  add column if not exists payment_status text not null default 'unpaid',
+  add column if not exists paid_at date;
+
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_constraint
+    where conname = 'expenses_payment_status_check'
+  ) then
+    alter table public.expenses
+      add constraint expenses_payment_status_check
+      check (payment_status in ('paid', 'unpaid'));
+  end if;
+end $$;
+
 create index if not exists expenses_user_id_idx on public.expenses(user_id);
 create index if not exists expenses_expense_date_idx on public.expenses(expense_date desc);
+create index if not exists expenses_payment_status_idx on public.expenses(payment_status);
 create index if not exists profiles_role_idx on public.profiles(role);
 
 create or replace function public.is_owner(user_id uuid default auth.uid())

@@ -4,7 +4,7 @@ import PageHeader from '../../components/PageHeader.jsx';
 import StatCard from '../../components/StatCard.jsx';
 import { CategoryPie, MonthlyBar } from '../../components/Charts.jsx';
 import ExpenseTable from '../../components/ExpenseTable.jsx';
-import { currentMonthExpenses, groupByCategory, monthlySeries, staffTotals, totalAmount } from '../../lib/analytics.js';
+import { currentMonthExpenses, groupByCategory, monthlySeries, totalAmount, unpaidExpenses } from '../../lib/analytics.js';
 import { listExpenses, listProfiles } from '../../lib/api.js';
 import { currency } from '../../lib/format.js';
 
@@ -24,8 +24,8 @@ export default function OwnerDashboard() {
 
   const staff = profiles.filter((profile) => profile.role === 'staff');
   const month = currentMonthExpenses(expenses);
+  const pending = unpaidExpenses(expenses);
   const categories = groupByCategory(expenses);
-  const topStaff = staffTotals(expenses)[0];
 
   return (
     <div className="space-y-6">
@@ -34,7 +34,7 @@ export default function OwnerDashboard() {
         <StatCard label="Total Staff" value={loading ? '...' : staff.length} icon={Users} tone="blue" />
         <StatCard label="Total Expenses" value={currency(totalAmount(expenses))} icon={ReceiptText} />
         <StatCard label="Monthly Expenses" value={currency(totalAmount(month))} icon={CreditCard} tone="amber" />
-        <StatCard label="Top Spender" value={topStaff?.name || '-'} detail={topStaff ? currency(topStaff.total) : 'No expenses yet'} icon={TrendingUp} tone="rose" />
+        <StatCard label="Pending Payments" value={currency(totalAmount(pending))} detail={`${pending.length} unpaid records`} icon={TrendingUp} tone="rose" />
       </div>
       <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
         <section className="card p-5">

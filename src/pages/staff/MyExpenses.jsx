@@ -9,7 +9,7 @@ import PageHeader from '../../components/PageHeader.jsx';
 import StatCard from '../../components/StatCard.jsx';
 import { useAuth } from '../../contexts/AuthContext.jsx';
 import { createExpense, deleteExpense, listExpenses, updateExpense } from '../../lib/api.js';
-import { currentMonthExpenses, totalAmount } from '../../lib/analytics.js';
+import { totalAmount, unpaidExpenses } from '../../lib/analytics.js';
 import { currency } from '../../lib/format.js';
 
 export default function MyExpenses() {
@@ -74,7 +74,7 @@ export default function MyExpenses() {
       <DateFilters filters={filters} setFilters={setFilters} />
       <div className="grid gap-4 sm:grid-cols-3">
         <StatCard label="Filtered Total" value={currency(totalAmount(expenses))} />
-        <StatCard label="Monthly Total" value={currency(totalAmount(currentMonthExpenses(expenses)))} tone="amber" />
+        <StatCard label="Pending Payment" value={currency(totalAmount(unpaidExpenses(expenses)))} tone="amber" />
         <StatCard label="Records" value={loading ? '...' : expenses.length} tone="blue" />
       </div>
       <ExpenseTable expenses={expenses} canManage onEdit={(expense) => { setEditing(expense); setShowForm(true); }} onDelete={removeExpense} showStaff={false} />

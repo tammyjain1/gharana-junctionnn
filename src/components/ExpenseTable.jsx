@@ -16,6 +16,8 @@ export default function ExpenseTable({ expenses, canManage, onEdit, onDelete, sh
               <th className="table-th">Amount</th>
               <th className="table-th">Category</th>
               <th className="table-th">Description</th>
+              <th className="table-th">Receiver</th>
+              <th className="table-th">Payment</th>
               <th className="table-th">Date</th>
               {canManage && <th className="table-th">Actions</th>}
             </tr>
@@ -28,6 +30,12 @@ export default function ExpenseTable({ expenses, canManage, onEdit, onDelete, sh
                 <td className="table-td font-semibold">{currency(expense.amount)}</td>
                 <td className="table-td">{expense.category}</td>
                 <td className="table-td max-w-xs truncate">{expense.description || '-'}</td>
+                <td className="table-td">{expense.payment_receiver || '-'}</td>
+                <td className="table-td">
+                  <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${expense.payment_status === 'paid' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300'}`}>
+                    {expense.payment_status === 'paid' ? 'Paid' : 'Unpaid'}
+                  </span>
+                </td>
                 <td className="table-td">{shortDate(expense.expense_date)}</td>
                 {canManage && (
                   <td className="table-td">

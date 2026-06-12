@@ -4,6 +4,14 @@ export function totalAmount(expenses) {
   return expenses.reduce((sum, expense) => sum + Number(expense.amount || 0), 0);
 }
 
+export function unpaidExpenses(expenses) {
+  return expenses.filter((expense) => expense.payment_status === 'unpaid');
+}
+
+export function paidExpenses(expenses) {
+  return expenses.filter((expense) => expense.payment_status === 'paid');
+}
+
 export function currentMonthExpenses(expenses) {
   const now = new Date();
   return expenses.filter((expense) => {
